@@ -1,9 +1,9 @@
 # Notified
 
 ## Initial Comment
-Notifiier is made to work with a scheduler ** think cron jobs ** this is used to schedule when notifier initiates. Since the job of this application is just to send initial e-mails to people that need to be notified. There will also be a couple other small applications (including a web application) that will complement this one to just a warning that this is not a one application does everything. 
-** Warning ** 
-If you notice in the Initial Setup section that something shows as ** coming soon ** then that means that the system doesn't work and all that is really available is code on github which for most people means that it is not usable
+Notifiier is made to work with a scheduler **think cron jobs** this is used to schedule when notifier initiates. Since the job of this application is just to send initial e-mails to people that need to be notified. There will also be a couple other small applications (including a web application) that will complement this one to just a warning that this is not a one application does everything. 
+**Warning** 
+If you notice in the Initial Setup section that something shows as **coming soon** then that means that the system doesn't work and all that is really available is code on github which for most people means that it is not usable
 
 ## Initial Setup
 - Set Cron job up (or other scheduler) to call Notifier 
