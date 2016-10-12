@@ -2,6 +2,12 @@ package com.github.KCulture.Notified;
 
 //File Name SendEmail.java
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -78,5 +84,25 @@ public void getSomething(){
   //TODO: 10-11-16
 	//will later config file so information can be added manually
 	// new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/config.txt"))); 
+}
+
+public void saveProps(){
+	try {
+		
+	//	Files.newBufferedReader(Paths.get("/config.txt"),Charset.defaultCharset());  
+	// TODO: Not working but stuff to work on	
+		Properties properties = new Properties();
+		properties.setProperty("favoriteAnimal", "marmot");
+		properties.setProperty("favoriteContinent", "Antarctica");
+		properties.setProperty("favoritePerson", "Nicole");
+
+		FileWriter file = new FileWriter("test2.properties");
+		properties.store(file, "Favorite Things");
+		file.close();
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
 }
 }
