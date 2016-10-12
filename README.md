@@ -7,7 +7,7 @@ If you notice in the Initial Setup section that something shows as **coming soon
 
 ## Initial Setup
 - Set Cron job up (or other scheduler) to call Notifier 
-- Setup Database and config file so that Notifier knows who to notify *database connector and property file are*  **coming soon**
+- Setup Database and config file so that Notifier knows who to notify (found in database) and mail server informaiton(found in configuration file) *database connector and property file are*  **coming soon**
 - Download Notifier **coming soon**
 - If using a reminder Setup AppraisalParrot **coming soon**
 - Create user front-end so that users can enter information **coming soon**
