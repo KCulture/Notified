@@ -1,7 +1,12 @@
 package com.github.KCulture.Notified.Services;
 
+import java.util.List;
+
+import com.github.KCulture.Notified.Repository.Employee;
+
 public interface DatabaseService {
 	
-	public String connect();
+	public int connect();
+	public List<Employee> listOfAppraised(int quarter);
 
 }
