@@ -18,7 +18,23 @@ import com.mongodb.DBCursor;
 import com.github.KCulture.Notified.Repository.Employee;
 
 public class MongoDatabaseService implements DatabaseService {
+	private static final String COLLECTION = "employee";
+	private static final String DATABASE = "test";
 	MongoClient mongoClient = null;
+	final private Calendar currentDate ;
+	final private Date marchDate ;
+	final private Date juneDate  ;
+	final private Date septemberDate ;
+	final private Date decemberDate ;
+	public MongoDatabaseService(){
+		this.currentDate = Calendar.getInstance();
+		this.marchDate = this.getMarch();
+		this.juneDate  =  this.getJune();
+		this.septemberDate = this.getSeptember();
+		this.decemberDate  = this.getDecember();
+		
+		
+	}
 	@Override
 	public int connect() {
 		this.initDatabase();
@@ -39,15 +55,14 @@ public class MongoDatabaseService implements DatabaseService {
 	public List<Employee> listOfAppraised(int quarter){
 		List<Employee> employees = new ArrayList<>();
 		this.initDatabase();
-		Calendar rightNow = Calendar.getInstance();
-	  rightNow.set(Calendar.MONTH,quarter);
-		DB db = mongoClient.getDB("test");
-	  DBCursor cursor = db.getCollection("employee").find();
+		//TODO Properties could Exchange some of these database parameter
+		DB db = mongoClient.getDB(DATABASE);
+	  DBCursor cursor = db.getCollection(COLLECTION).find();
 	  try {
 	     while(cursor.hasNext()) {
 	    	 DBObject object = (DBObject) cursor.next();
 	         Date date = (Date)object.get("hireDate");
-	         if(date.before(rightNow.getTime())){
+	         if(isAppraisalDate(date)){
 	        	 employees.add(this.toEmployee(object));
 	         }
 	     }
@@ -61,5 +76,63 @@ public class MongoDatabaseService implements DatabaseService {
 		
 		return new Employee(((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,((Date) mongoObj.get("hireDate")));
 	}
-
+	
+	private boolean isAppraisalDate(Date date){
+		return findRightQuarter(date) == findRightQuarter(this.currentDate);
+	}
+	
+	private int findRightQuarter(Calendar cal){
+		int month = cal.get(Calendar.MONTH);
+		return (month / 3) +1;
+	}
+	
+	public int findRightQuarter(Date date){
+		if(this.marchDate.after(date))return 1;
+		if(this.juneDate.after(date))return 2;
+		if(this.septemberDate.after(date))return 3;
+		if(this.decemberDate.after(date))return 4;
+		return 0;	
+	}
+	private Date getMarch(){
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, Calendar.MARCH);
+		cal.set(Calendar.DAY_OF_MONTH, 31);
+		cal.set(Calendar.HOUR, 11);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 999);
+		return cal.getTime();
+	}
+	private Date getJune(){
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, Calendar.JUNE);
+		cal.set(Calendar.DAY_OF_MONTH, 30);
+		cal.set(Calendar.HOUR, 11);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 999);
+		return cal.getTime();
+	}
+	
+	private Date getSeptember(){
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
+		cal.set(Calendar.DAY_OF_MONTH, 30);
+		cal.set(Calendar.HOUR, 11);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 999);
+		return cal.getTime();
+	}
+	
+	private Date getDecember(){
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, Calendar.DECEMBER);
+		cal.set(Calendar.DAY_OF_MONTH, 31);
+		cal.set(Calendar.HOUR, 11);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 999);
+		return cal.getTime();
+	}
 }
