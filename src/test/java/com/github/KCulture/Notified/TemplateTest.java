@@ -6,7 +6,6 @@ import org.junit.Assert;
 import com.github.KCulture.Notified.Services.EmailMessageService;
 import com.github.KCulture.Notified.Services.MongoDatabaseService;
 
-
 public class TemplateTest {
     @Test
     public void emptyTest() {
