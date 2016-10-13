@@ -1,23 +1,21 @@
 package com.github.KCulture.Notified.Services;
 
-//File Name SendEmail.java
+import java.util.List;
+import java.util.Properties;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
+
+import com.github.KCulture.Notified.Repository.Employee;
 
 public class EmailMessageService implements MessageService {
 
 private static final String TO = "**";
+private boolean lastSentStatus = true; //TODO possibly need to make abstract class that makes status field 
 
-public void sendMessage(Properties properties) { 
+
+public void sendMessage(Properties properties,List<Employee> employees) { 
  class SMTPAuthenticator extends javax.mail.Authenticator {
   	 
   	 public PasswordAuthentication getPasswordAuthentication() {
@@ -35,9 +33,6 @@ public void sendMessage(Properties properties) {
     Authenticator auth = new SMTPAuthenticator();
     Session session = Session.getInstance(properties, auth);
     session.setDebug(true);
-
-   // Get the default Session object.
- //  Session session = Session.getDefaultInstance(properties);
 
    try {
       // Create a default MimeMessage object.
@@ -58,38 +53,25 @@ public void sendMessage(Properties properties) {
       // Send message
       Transport.send(message);
       System.out.println("Sent message successfully....");
+      this.lastSentStatus = true;
    }catch (MessagingException mex) {
       mex.printStackTrace();
+      this.lastSentStatus = false;
    }
-}
-
-public void getSomething(){
-  //TODO: 10-11-16
-	//will later config file so information can be added manually
-	// new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/config.txt"))); 
 }
 
 public Properties loadProps(){
 	Properties properties = new Properties();
 	try {
-		
-	//	Files.newBufferedReader(Paths.get("/config.txt"),Charset.defaultCharset());  
-	// TODO: Not working but stuff to work on	
-		
 		properties.load(getClass().getResourceAsStream("..//config.txt"));
-		
-//		properties.setProperty("favoriteAnimal", "marmot");
-//		properties.setProperty("favoriteContinent", "Antarctica");
-//		properties.setProperty("favoritePerson", "Nicole");
-//
-//		FileWriter file = new FileWriter("test2.properties");
-//		properties.store(file, "Favorite Things");
-//		file.close();
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
 	return properties;
 }
+
+public boolean getLastStatus(){
+	return this.lastSentStatus;
+}
+
 }
