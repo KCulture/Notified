@@ -8,7 +8,9 @@ import org.junit.Test;
 
 import com.github.KCulture.Notified.Repository.Employee;
 import com.github.KCulture.Notified.Services.EmailMessageService;
+import com.github.KCulture.Notified.Services.EmployeeSelectionStrategy;
 import com.github.KCulture.Notified.Services.MongoDatabaseService;
+import com.github.KCulture.Notified.Services.QuarterlyStrategy;
 
 
 public class TemplateTest {
@@ -57,4 +59,11 @@ public class TemplateTest {
 //  	boolean quarter =  mongoDBClient.isAppraisalDate(Calendar.getInstance().getTime());
 //  	Assert.assertTrue( quarter );
 //  }
+  @Test
+  public void findRightQuarterTest() {
+  	MongoDatabaseService mongoDBClient = new MongoDatabaseService();
+  	List<Employee> employees =  mongoDBClient.listOfAppraised(new QuarterlyStrategy());
+  	System.out.println(employees.get(0).hireDate);
+  	Assert.assertTrue( employees.size() == 1 );
+  }
 }
