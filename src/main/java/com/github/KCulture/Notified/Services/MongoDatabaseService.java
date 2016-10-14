@@ -20,12 +20,14 @@ import com.github.KCulture.Notified.Repository.Employee;
 public class MongoDatabaseService implements DatabaseService {
 	private static final String COLLECTION = "employee";
 	private static final String DATABASE = "test";
+	
 	MongoClient mongoClient = null;
 	final private Calendar currentDate ;
 	final private Date marchDate ;
 	final private Date juneDate  ;
 	final private Date septemberDate ;
 	final private Date decemberDate ;
+	
 	public MongoDatabaseService(){
 		this.currentDate = Calendar.getInstance();
 		this.marchDate = this.getMarch();
@@ -74,7 +76,8 @@ public class MongoDatabaseService implements DatabaseService {
 	
 	private Employee toEmployee(DBObject mongoObj){
 		
-		return new Employee(((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,((Date) mongoObj.get("hireDate")));
+		return new Employee(((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,
+				((Date) mongoObj.get("hireDate")),((String)mongoObj.get("email")));
 	}
 	
 	private boolean isAppraisalDate(Date date){
