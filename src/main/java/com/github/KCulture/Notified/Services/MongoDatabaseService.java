@@ -57,7 +57,7 @@ public class MongoDatabaseService implements DatabaseService {
 	  mongoDB.getCollection(APPRAISED_COLLECTION).insert(appraised);
 		return appraised; 
 	}
-	
+	//TODO : conclude if exposing DB is a good idea
 	public DB getMongoDB(){
 		return mongoDB;
 	}
