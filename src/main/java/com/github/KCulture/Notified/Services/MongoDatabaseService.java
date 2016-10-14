@@ -2,21 +2,13 @@ package com.github.KCulture.Notified.Services;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.Date;
-import java.util.Calendar;
-
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.DB;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
-
-
 
 import com.github.KCulture.Notified.Repository.Employee;
+import com.mongodb.DB;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 
 public class MongoDatabaseService implements DatabaseService {
 	private static final String APPRAISED_COLLECTION = "appraised";
@@ -25,9 +17,9 @@ public class MongoDatabaseService implements DatabaseService {
 	
 	
 	
-	static MongoClient mongoClient = null;
-	static DB mongoDB = null;
-	static DBCursor cursor = null;
+	private static MongoClient mongoClient = null;
+	private static DB mongoDB = null;
+	private static DBCursor cursor = null;
 	
 	public MongoDatabaseService(){
    this.initDatabase();
@@ -58,12 +50,16 @@ public class MongoDatabaseService implements DatabaseService {
 	  return employees; 
 	}
 	
-	public void writeAppraisableToStorage(EmployeeSelectionStrategy selected){
+	public List<DBObject> writeAppraisableToStorage(EmployeeSelectionStrategy selected){
 		List<DBObject> appraised = new ArrayList<>();
 		DBCursor dbCopy = cursor.copy();
 	  appraised.addAll(selected.getAppraisableDBObjects(dbCopy)); 
 	  mongoDB.getCollection(APPRAISED_COLLECTION).insert(appraised);
-		return ; 
+		return appraised; 
+	}
+	
+	public DB getMongoDB(){
+		return mongoDB;
 	}
 	
 	
