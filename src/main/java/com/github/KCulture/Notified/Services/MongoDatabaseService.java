@@ -19,35 +19,31 @@ import com.mongodb.DBCursor;
 import com.github.KCulture.Notified.Repository.Employee;
 
 public class MongoDatabaseService implements DatabaseService {
+	private static final String APPRAISED_COLLECTION = "appraised";
 	private static final String COLLECTION = "employee";
 	private static final String DATABASE = "test";
 	
-	MongoClient mongoClient = null;
-	final private Calendar currentDate ;
-	final private Date marchDate ;
-	final private Date juneDate  ;
-	final private Date septemberDate ;
-	final private Date decemberDate ;
+	
+	
+	static MongoClient mongoClient = null;
+	static DB mongoDB = null;
+	static DBCursor cursor = null;
 	
 	public MongoDatabaseService(){
-		this.currentDate = Calendar.getInstance();
-		this.marchDate = this.getMarch();
-		this.juneDate  =  this.getJune();
-		this.septemberDate = this.getSeptember();
-		this.decemberDate  = this.getDecember();
-		
-		
+   this.initDatabase();
 	}
 	@Override
 	public int connect() {
 		this.initDatabase();
-	  return (this.mongoClient != null)?1:-1;
+	  return (mongoClient != null)?1:-1;
 	}
 	
 	private MongoClient initDatabase(){
 		try{
-			this.mongoClient = new MongoClient( "localhost" , 27017 );
-			// TODO: Build an adapter to encapsulate client 
+			mongoClient = new MongoClient( "localhost" , 27017 );
+			mongoDB = mongoClient.getDB(DATABASE);
+			cursor = mongoDB.getCollection(COLLECTION).find();
+			//TODO Properties could Exchange some of these database parameter
 		}catch(UnknownHostException noHost){
 			noHost.addSuppressed(noHost);
 			System.out.println(noHost.getMessage());
@@ -55,76 +51,21 @@ public class MongoDatabaseService implements DatabaseService {
 		return mongoClient;
 	}
 	
-	public List<Employee> listOfAppraised(int quarter){
+	public List<Employee> listOfAppraised(EmployeeSelectionStrategy selected){
 		List<Employee> employees = new ArrayList<>();
-		this.initDatabase();
-		//TODO Properties could Exchange some of these database parameter
-		DB db = mongoClient.getDB(DATABASE);
-	  try(DBCursor cursor = db.getCollection(COLLECTION).find()){
-	     employees.addAll(getAppraisableEmployees(cursor));
-	  }
-		return employees; 
+		DBCursor localCursor = cursor.copy();
+			 employees.addAll(selected.getAppraisableEmployees(localCursor));
+	  return employees; 
 	}
 	
-	private List<? extends Employee> getAppraisableEmployees(DBCursor cursor) {
-		List<Employee> employees = new ArrayList<>();
-		for(DBObject mongoObject : cursor){
-   	 Date date = (Date)mongoObject.get("hireDate");
-        if(isAppraisalDate(date)){
-       	 employees.add(this.toEmployee(mongoObject));
-        }
-    }
-	  return employees;
-  }
-	private Employee toEmployee(DBObject mongoObj){
-		
-		return new Employee(((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,
-				((Date) mongoObj.get("hireDate")),((String)mongoObj.get("email")));
+	public void writeAppraisableToStorage(EmployeeSelectionStrategy selected){
+		List<DBObject> appraised = new ArrayList<>();
+		DBCursor dbCopy = cursor.copy();
+	  appraised.addAll(selected.getAppraisableDBObjects(dbCopy)); 
+	  mongoDB.getCollection(APPRAISED_COLLECTION).insert(appraised);
+		return ; 
 	}
 	
-	public boolean isAppraisalDate(Date date){
-		return findRightQuarter(date) == findRightQuarter(this.currentDate);
-	}
 	
-	private int findRightQuarter(Calendar cal){
-		int month = cal.get(Calendar.MONTH);
-		return (month / 3) +1;
-	}
 	
-	public int findRightQuarter(Date date){
-		if(this.marchDate.after(date))return 1;
-		if(this.juneDate.after(date))return 2;
-		if(this.septemberDate.after(date))return 3;
-		if(this.decemberDate.after(date))return 4;
-		return 0;	
-	}
-	private Date getMarch(){
-		Calendar cal = generalCalendar(Calendar.MARCH);
-		return cal.getTime();
-	}
-	private Date getJune(){
-		Calendar cal = generalCalendar(Calendar.JUNE);
-		return cal.getTime();
-	}
-	
-	private Date getSeptember(){
-		Calendar cal = generalCalendar(Calendar.SEPTEMBER);
-		return cal.getTime();
-	}
-	
-	private Date getDecember(){
-		Calendar cal = generalCalendar(Calendar.DECEMBER);
-		return cal.getTime();
-	}
-	
-	private Calendar generalCalendar(int month){
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, 31);
-		cal.set(Calendar.HOUR, 11);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		cal.set(Calendar.MILLISECOND, 999);
-		return cal;
-	}
 }

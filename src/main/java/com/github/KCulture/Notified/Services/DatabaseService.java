@@ -7,6 +7,6 @@ import com.github.KCulture.Notified.Repository.Employee;
 public interface DatabaseService {
 	
 	public int connect();
-	public List<Employee> listOfAppraised(int quarter);
+	public List<Employee> listOfAppraised(EmployeeSelectionStrategy selected);
 
 }
