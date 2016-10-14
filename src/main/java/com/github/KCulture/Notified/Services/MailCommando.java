@@ -8,7 +8,7 @@ public class MailCommando implements Commando {
 	List<Employee> employees;
 	EmailMessageService emailService = new EmailMessageService();
 	
-	MailCommando(List<Employee> employees){
+	public MailCommando(List<Employee> employees){
 		this.employees = employees;
 	}
 	@Override
