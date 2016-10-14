@@ -14,7 +14,9 @@ public class Notified {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		List<Employee> employees = new SimpleDataStore().getEmployees();
+		SimpleDataStore simpleStore= new SimpleDataStore();
+		List<Employee> employees = simpleStore.getEmployees();
+		simpleStore.writeAppraisableEmployeesToStorage();
 		Commando command = new MailCommando(employees);
 		CmdTrigger cmdTrigger = new CmdTrigger();
 		cmdTrigger.triggerCommand(command);
