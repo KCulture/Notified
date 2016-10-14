@@ -6,13 +6,15 @@ import com.github.KCulture.Notified.Repository.Employee;
 
 public abstract class DataStore {
   protected DatabaseService dbService;
+  protected QuarterlyStrategy quarterlyStrategy;
   
-  public DataStore(DatabaseService dbService) {
+  public DataStore(DatabaseService dbService, QuarterlyStrategy quarterlyStrategy) {
 	  this.dbService = dbService;
+	  this.quarterlyStrategy = quarterlyStrategy;
   }
   
   public List<Employee> getEmployees(){
-  	return this.dbService.listOfAppraised(this.monthSelectionStrategy());
+  	return this.dbService.listOfAppraised(this.quarterlyStrategy);
   	
   }
 
