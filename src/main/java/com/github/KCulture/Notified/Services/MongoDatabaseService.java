@@ -97,45 +97,32 @@ public class MongoDatabaseService implements DatabaseService {
 		return 0;	
 	}
 	private Date getMarch(){
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, Calendar.MARCH);
-		cal.set(Calendar.DAY_OF_MONTH, 31);
-		cal.set(Calendar.HOUR, 11);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		cal.set(Calendar.MILLISECOND, 999);
+		Calendar cal = generalCalendar(Calendar.MARCH);
 		return cal.getTime();
 	}
 	private Date getJune(){
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, Calendar.JUNE);
-		cal.set(Calendar.DAY_OF_MONTH, 30);
-		cal.set(Calendar.HOUR, 11);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		cal.set(Calendar.MILLISECOND, 999);
+		Calendar cal = generalCalendar(Calendar.JUNE);
 		return cal.getTime();
 	}
 	
 	private Date getSeptember(){
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
-		cal.set(Calendar.DAY_OF_MONTH, 30);
-		cal.set(Calendar.HOUR, 11);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		cal.set(Calendar.MILLISECOND, 999);
+		Calendar cal = generalCalendar(Calendar.SEPTEMBER);
 		return cal.getTime();
 	}
 	
 	private Date getDecember(){
+		Calendar cal = generalCalendar(Calendar.DECEMBER);
+		return cal.getTime();
+	}
+	
+	private Calendar generalCalendar(int month){
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, Calendar.DECEMBER);
+		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, 31);
 		cal.set(Calendar.HOUR, 11);
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.SECOND, 59);
 		cal.set(Calendar.MILLISECOND, 999);
-		return cal.getTime();
+		return cal;
 	}
 }
