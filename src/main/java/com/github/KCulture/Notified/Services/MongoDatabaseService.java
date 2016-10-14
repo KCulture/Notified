@@ -2,6 +2,7 @@ package com.github.KCulture.Notified.Services;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
@@ -59,28 +60,29 @@ public class MongoDatabaseService implements DatabaseService {
 		this.initDatabase();
 		//TODO Properties could Exchange some of these database parameter
 		DB db = mongoClient.getDB(DATABASE);
-	  DBCursor cursor = db.getCollection(COLLECTION).find();
-	  try {
-	     while(cursor.hasNext()) {
-	    	 DBObject object = (DBObject) cursor.next();
-	         Date date = (Date)object.get("hireDate");
-	         if(isAppraisalDate(date)){
-	        	 employees.add(this.toEmployee(object));
-	         }
-	     }
-	  } finally {
-	     cursor.close();
+	  try(DBCursor cursor = db.getCollection(COLLECTION).find()){
+	     employees.addAll(getAppraisableEmployees(cursor));
 	  }
 		return employees; 
 	}
 	
+	private List<? extends Employee> getAppraisableEmployees(DBCursor cursor) {
+		List<Employee> employees = new ArrayList<>();
+		for(DBObject mongoObject : cursor){
+   	 Date date = (Date)mongoObject.get("hireDate");
+        if(isAppraisalDate(date)){
+       	 employees.add(this.toEmployee(mongoObject));
+        }
+    }
+	  return employees;
+  }
 	private Employee toEmployee(DBObject mongoObj){
 		
 		return new Employee(((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,
 				((Date) mongoObj.get("hireDate")),((String)mongoObj.get("email")));
 	}
 	
-	private boolean isAppraisalDate(Date date){
+	public boolean isAppraisalDate(Date date){
 		return findRightQuarter(date) == findRightQuarter(this.currentDate);
 	}
 	
