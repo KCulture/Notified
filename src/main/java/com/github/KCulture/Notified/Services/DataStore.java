@@ -3,6 +3,7 @@ package com.github.KCulture.Notified.Services;
 import java.util.List;
 
 import com.github.KCulture.Notified.Repository.Employee;
+import com.mongodb.DBObject;
 
 public abstract class DataStore {
   protected DatabaseService dbService;
@@ -19,5 +20,7 @@ public abstract class DataStore {
   }
 
 	protected abstract int monthSelectionStrategy();
+	
+	public abstract List<DBObject> writeAppraisableEmployeesToStorage();
   
 }
