@@ -2,7 +2,10 @@ package com.github.KCulture.Notified;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.bson.BSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,6 +14,8 @@ import com.github.KCulture.Notified.Services.EmailMessageService;
 import com.github.KCulture.Notified.Services.EmployeeSelectionStrategy;
 import com.github.KCulture.Notified.Services.MongoDatabaseService;
 import com.github.KCulture.Notified.Services.QuarterlyStrategy;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 
 public class TemplateTest {
@@ -65,5 +70,13 @@ public class TemplateTest {
   	List<Employee> employees =  mongoDBClient.listOfAppraised(new QuarterlyStrategy());
   	System.out.println(employees.get(0).hireDate);
   	Assert.assertTrue( employees.size() == 1 );
+  }
+  
+  public void checknewDatabaseTest() {
+  	MongoDatabaseService mongoDBClient = new MongoDatabaseService();
+  	List<DBObject> employees =  mongoDBClient.writeAppraisableToStorage(new QuarterlyStrategy());
+  	 long count = mongoDBClient.getMongoDB().getCollection("appraised").count();
+  	Assert.assertTrue( employees.size() == count );
+  	mongoDBClient.getMongoDB().getCollection("appraised").remove(new BasicDBObject() );
   }
 }
