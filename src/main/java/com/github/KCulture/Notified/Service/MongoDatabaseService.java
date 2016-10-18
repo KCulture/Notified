@@ -29,31 +29,25 @@ public class MongoDatabaseService implements DatabaseService {
 	 
 	}
 	
-	public MongoDatabaseService(Properties propsFile){
-		this.propsFile = propsFile;
+	public MongoDatabaseService(Properties propsFileLocation){
+		this.propsFile = propsFileLocation;
 		this.initDatabase();
 		
 	}
 	
 	private MongoClient initDatabase(){
 		try{
+			//TODO add property values in constructor
 			if(this.propsFile != null){
-				mongoClient = new MongoClient( "localhost" , 27017 );
-				mongoDB = mongoClient.getDB(DATABASE);
-				cursor = mongoDB.getCollection(COLLECTION).find();
-				
-			}
-			else{
-			mongoClient = new MongoClient( "localhost" , 27017 );
-			mongoDB = mongoClient.getDB(DATABASE);
-			cursor = mongoDB.getCollection(COLLECTION).find();
-			//TODO Properties could Exchange some of these database parameter
+				mongoClient = new MongoClient( this.propsFile.getProperty("mongo.server","localhost"), 
+						Integer.valueOf(this.propsFile.getProperty("mongo.port",String.valueOf(27017))));
+				mongoDB = mongoClient.getDB(this.propsFile.getProperty("mongo.database",DATABASE));
+				cursor = mongoDB.getCollection(this.propsFile.getProperty("mongo.collection",COLLECTION)).find();
 			}
 		}catch(UnknownHostException noHost){
 			noHost.addSuppressed(noHost);
 			System.out.println(noHost.getMessage());
 		}
-		
 		return mongoClient;
 	}
 	
@@ -63,6 +57,7 @@ public class MongoDatabaseService implements DatabaseService {
 			 employees.addAll(selected.getAppraisableEmployees(localCursor));
 	  return employees; 
 	}
+	
 	//TODO: need to do some exception work in case duplicate key issues arises
 	public List<DBObject> writeAppraisableToStorage(EmployeeSelectionStrategy selected){
 		List<DBObject> appraised = new ArrayList<>();
@@ -76,6 +71,12 @@ public class MongoDatabaseService implements DatabaseService {
 		return mongoDB;
 	}
 	
-	
+		@Override
+    protected void finalize() throws Throwable {
+        try{mongoClient.close();}
+        catch(Throwable t){
+          throw t;
+        }		
+	}
 	
 }

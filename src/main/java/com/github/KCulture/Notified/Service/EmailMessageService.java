@@ -22,7 +22,7 @@ import com.github.KCulture.Notified.Repository.Employee;
 public class EmailMessageService implements MessageService {
 
 private static final String TO = "**";
-//private boolean lastSentStatus = true; //TODO 10-17-16 remove today if no purpose is found 
+//private boolean lastSentStatus = true; //TODO 10-17-16 remove by 10-20-16 if no purpose is found 
 
 
 public void sendMessage(Properties properties,List<Employee> employees) { 

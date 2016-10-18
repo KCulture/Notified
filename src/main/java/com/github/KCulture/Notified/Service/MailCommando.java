@@ -12,11 +12,11 @@ public class MailCommando implements Commando {
 	
 	public MailCommando(List<Employee> employees, Properties propFile){
 		this.employees = employees;
-		this.propFile = propFile;
+		this.propFile = propFile;	
 	}
 	@Override
   public void execute() {
-		emailService.sendMessage(emailService.loadProps(),employees);
+		emailService.sendMessage(this.propFile,employees);
 	}
 	@Override
   public boolean status() {
