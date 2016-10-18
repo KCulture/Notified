@@ -1,15 +1,18 @@
-package com.github.KCulture.Notified.Services;
+package com.github.KCulture.Notified.Service;
 
 import java.util.List;
+import java.util.Properties;
 
 import com.github.KCulture.Notified.Repository.Employee;
 
 public class MailCommando implements Commando {
 	List<Employee> employees;
 	EmailMessageService emailService = new EmailMessageService();
+	final Properties propFile;
 	
-	public MailCommando(List<Employee> employees){
+	public MailCommando(List<Employee> employees, Properties propFile){
 		this.employees = employees;
+		this.propFile = propFile;
 	}
 	@Override
   public void execute() {
@@ -17,7 +20,7 @@ public class MailCommando implements Commando {
 	}
 	@Override
   public boolean status() {
-	  emailService.getLastStatus();
+	  //emailService.getLastStatus();
 	  return false;
   }
 	

@@ -1,4 +1,4 @@
-package com.github.KCulture.Notified.Services;
+package com.github.KCulture.Notified.Service;
 
 public interface Commando {
   public boolean status();

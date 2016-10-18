@@ -1,4 +1,4 @@
-package com.github.KCulture.Notified.Services;
+package com.github.KCulture.Notified.Service;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import com.mongodb.DBObject;
 
 public interface DatabaseService {
 	
-	public int connect();
 	public List<Employee> listOfAppraised(EmployeeSelectionStrategy selected);
 	public List<DBObject> writeAppraisableToStorage(EmployeeSelectionStrategy selected);
 
