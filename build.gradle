@@ -5,7 +5,8 @@ sourceCompatibility = 1.7
 version = '1.0'
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+        attributes 'Implementation-Title': 'Notified', 'Implementation-Version': 0.01,
+        'Main-Class': 'com.github.KCulture.Notified.application.Notified'
     }
 }
 
@@ -30,4 +31,13 @@ uploadArchives {
            dirs 'repos'
        }
     }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.github.KCulture.Notified.application.Notified'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }

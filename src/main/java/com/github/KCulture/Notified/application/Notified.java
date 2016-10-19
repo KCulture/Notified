@@ -32,7 +32,7 @@ public class Notified {
 	// Produces property file from fileName or default property file stored in jar 
 	private static Properties loadProps(String fileName){
 		Properties properties = new Properties();
-		if(fileName != null){
+		if(fileName != null ){
 			try (InputStream in = new FileInputStream(fileName)){
 				properties.load(in);
 			} catch (IOException e) {
@@ -47,7 +47,7 @@ public class Notified {
 	private static Properties loadProps(){
 		Properties properties = new Properties();
 		try {
-			properties.load(Notified.class.getClass().getResourceAsStream("config.txt"));
+			properties.load(Notified.class.getResourceAsStream("config.txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("redownload or rebuild because default file is corrupted");

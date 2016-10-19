@@ -1,7 +1,15 @@
 package com.github.KCulture.Notified;
 
-import org.junit.Test;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Properties;
+
 import org.junit.Assert;
+import org.junit.Test;
 
 import com.github.KCulture.Notified.Service.MongoDatabaseService;
 import com.github.KCulture.Notified.application.Notified;
@@ -98,12 +106,58 @@ public class TemplateTest {
 //    }
 		@Test
 		public void noCommandArgTest() {
-			MongoDatabaseService mongo = new MongoDatabaseService();
+			MongoDatabaseService mongo = new MongoDatabaseService(getPropFile());
 			mongo.getMongoDB().getCollection("appraised").remove(new BasicDBObject() );
 			String[] strang = {""}; 
 			Notified.main(strang);
 			Assert.assertTrue("",mongo.getMongoDB().getCollection("appraised").getCount() > 0);
 			mongo.getMongoDB().getCollection("appraised").remove(new BasicDBObject() );
+		}
+		
+		@Test //Warning: This will remove everything from appraised collection. Consider before  
+		public void commandLineArgTest() throws IOException {
+			MongoDatabaseService mongo = new MongoDatabaseService(getPropFile());
+			mongo.getMongoDB().getCollection("appraised").remove(new BasicDBObject() );
+			String[] strang = new String[1];
+			strang[0] = createpropFile();
+			Notified.main(strang);
+			Assert.assertTrue("Nothing was added to appraised collection",mongo.getMongoDB().getCollection("appraised").getCount() > 0);
+			mongo.getMongoDB().getCollection("appraised").remove(new BasicDBObject() );
+			Files.delete(Paths.get(strang[0]));
 			
+		}
+		
+		private String createpropFile(){
+			Properties prop = new Properties();
+			prop.setProperty("mail.smtp.host", "localhost");
+			prop.setProperty("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+			prop.setProperty("mail.smtp.ssl.enable",String.valueOf(false));
+			prop.setProperty("mail.smtp.starttls.enable",String.valueOf(false));
+			prop.setProperty("mail.smtp.auth",String.valueOf(false));
+			prop.setProperty("mail.smtp.port","25");
+			prop.setProperty("FROM","soso@localhost");
+			prop.setProperty("mongo.server","localhost");
+			prop.setProperty("mongo.database","test");
+			prop.setProperty("mongo.collection","employee");
+			prop.setProperty("mongo.port","27017");
+			prop.setProperty("mongo.appraised.collection","appraised");
+			
+			
+			try (BufferedWriter br= Files.newBufferedWriter(Paths.get(System.getProperty("user.dir"),"propfile"),Charset.defaultCharset());){
+	      prop.store(br, "setting propfile");
+      } catch (IOException e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	      System.out.println("this is not working");
+      }
+			return System.getProperty("user.dir").concat("/propfile");
+		}
+		private Properties getPropFile(){
+			Properties prop = new Properties();
+			try (BufferedReader br= Files.newBufferedReader(Paths.get(createpropFile()),Charset.defaultCharset());){
+				prop.load(br);
+			} catch (IOException e) {
+			}
+			return prop;
 		}
 }
