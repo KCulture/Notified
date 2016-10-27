@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.github.KCulture.Notified.Repository.Employee;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -53,8 +54,8 @@ public class MongoDatabaseService implements DatabaseService {
 	  return employees; 
 	}
 	
-	//TODO: need to do some exception work in case duplicate key issues arises
 	public List<DBObject> writeAppraisableToStorage(EmployeeSelectionStrategy selected){
+		mongoDB.getCollection(this.propsFile.getProperty("mongo.appraised.collection")).remove(new BasicDBObject() );
 		List<DBObject> appraised = new ArrayList<>();
 		DBCursor dbCopy = cursor.copy();
 	  appraised.addAll(selected.getAppraisableDBObjects(dbCopy)); 
