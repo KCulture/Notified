@@ -15,12 +15,19 @@ import com.github.KCulture.Notified.Service.SimpleDataStore;
 
 
 public class Notified {
-  //TODO allow property files to be supplied through CLI
+  
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Properties propFile = loadProps(args[0]);
+		Properties propFile = null;
+		if(args != null && args.length >= 1){
+			propFile = loadProps(args[0]);
+		}
+		if(args == null || args.length == 0){
+			propFile = loadProps();
+		}
+		
 		DataStore simpleStore= new SimpleDataStore(propFile);
 		List<Employee> employees = simpleStore.getEmployees();
 		simpleStore.writeAppraisableEmployeesToStorage();

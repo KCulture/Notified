@@ -1,0 +1,17 @@
+mail.smtp.host = localhost
+mail.smtp.socketFactory.class = javax.net.ssl.SSLSocketFactory
+mail.smtp.ssl.enable = false
+mail.smtp.starttls.enable = false
+mail.smtp.auth = false
+mail.smtp.port = 25
+FROM = soso@localhost
+mongo.server = localhost
+mongo.database = test
+mongo.collection = employee
+mongo.port = 27017
+mongo.appraised.collection = appraised
+company.host.address = uloveit
+company.web.path = appraisals
+
+email.subject = Employee Appraisals
+email.body = Well it's that time again.. \nI know the year went by way to fast. \nBut, at least you get to remind your company of all the impressive things that you've accomplished! \nI think you know the drill but just a reminder: \nFirst, make a list of all the people that you've helped. Get their Name,Email,Title (hopefully one is a manager) \nThen make a list of all your accomplishments (hopefully you stored these with us throughout the year) \nGo to AppraislURL and update any missing information \nThen get ready for your Appraisal to be a Zap!   

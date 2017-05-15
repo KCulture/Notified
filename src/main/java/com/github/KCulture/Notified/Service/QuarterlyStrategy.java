@@ -98,7 +98,7 @@ public class QuarterlyStrategy implements EmployeeSelectionStrategy {
 	}
 	private Employee toEmployee(DBObject mongoObj){
 		
-		return new Employee(((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,
+		return new Employee((String)mongoObj.get("_id"),((String)mongoObj.get("firstName")),((String)mongoObj.get("lastName")) ,
 				((Date) mongoObj.get("hireDate")),((String)mongoObj.get("email")));
 	}
 
