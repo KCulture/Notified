@@ -14,4 +14,7 @@ company.host.address = uloveit
 company.web.path = appraisals
 
 email.subject = Employee Appraisals
-email.body = Well it's that time again.. \nI know the year went by way to fast. \nBut, at least you get to remind your company of all the impressive things that you've accomplished! \nI think you know the drill but just a reminder: \nFirst, make a list of all the people that you've helped. Get their Name,Email,Title (hopefully one is a manager) \nThen make a list of all your accomplishments (hopefully you stored these with us throughout the year) \nGo to AppraislURL and update any missing information \nThen get ready for your Appraisal to be a Zap!   
+email.body = Well it's that time again.. \nI know the year went by way to fast. \nBut, at least you get to remind your company of all the impressive things that you've accomplished! \nI think you know the drill but just a reminder: \nFirst, make a list of all the people that you've helped. Get their Name,Email,Title (hopefully one is a manager) \nThen make a list of all your accomplishments (hopefully you stored these with us throughout the year) \nGo to AppraislURL and update any missing information \nThen get ready for your Appraisal to be a Zap!
+
+responder.email.subject = The joy of appraisals is upon you    
+responder.email.body = Howdy RespondersFirstName, \n EmployeesName is having their performance appraisal and thought you're feedback was important  
