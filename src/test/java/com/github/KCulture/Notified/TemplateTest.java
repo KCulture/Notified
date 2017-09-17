@@ -102,17 +102,17 @@ public class TemplateTest {
 //  	aa.add(e);aa.add(b);
 //  	Assert.assertTrue(se.getEmployeeEmails(aa)[0].getAddress().equalsIgnoreCase("a@acme.com")); 
 //  }
-    @Test
-    public void sendMail() throws AddressException, IOException {
-    	EmailMessageService se = new EmailMessageService();	
-    	Employee e = new Employee("32wefdsada","a", "", Calendar.getInstance().getTime(), "a@acme.com");
-    	Employee b = new Employee("32wefwaed","a", "", Calendar.getInstance().getTime(), "b@acme.com");
-    	Properties props = new Properties();
-    	props.load(Notified.class.getResourceAsStream("config.txt"));
-    	List<Employee> aa = new ArrayList<>();
-    	aa.add(e);aa.add(b);
-    	se.sendMessage(props, aa); 
-    }
+//    @Test
+//    public void sendMail() throws AddressException, IOException {
+//    	EmailMessageService se = new EmailMessageService();	
+//    	Employee e = new Employee("32wefdsada","a", "", Calendar.getInstance().getTime(), "a@acme.com");
+//    	Employee b = new Employee("32wefwaed","a", "", Calendar.getInstance().getTime(), "b@acme.com");
+//    	Properties props = new Properties();
+//    	props.load(Notified.class.getResourceAsStream("config.txt"));
+//    	List<Employee> aa = new ArrayList<>();
+//    	aa.add(e);aa.add(b);
+//    	se.sendMessage(props, aa); 
+//    }
 //		@Test
 //		public void noCommandArgTest() throws IOException{
 //			MongoDatabaseService mongo = new MongoDatabaseService(getPropFile());

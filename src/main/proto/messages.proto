@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package user;
+
+option java_package = "com.github.KCulture.Notified.grpc";
+
+message Responder{
+string firstName= 1;
+string lastname= 2;
+string email = 3;
+repeated string questions = 4;
+repeated string answers = 5;
+}
+message ResponderRequest{
+  repeated Responder responder = 1;
+}
+message ResponderResponse{}
+
+service ResponderService {
+ rpc NotifyResponder (ResponderRequest) returns (ResponderResponse);
+}

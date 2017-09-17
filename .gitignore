@@ -1,16 +1,8 @@
-.settings
-.gradle
-*.class
-build
-bin
-.classpath
+build/*
+bin/*
+cert.pem
+key.pem
+.settings/
 .project
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-hs_err_pid*
-
-
+.classpath
+.gradle/

@@ -1,42 +1,110 @@
+buildscript {
+    repositories {
+        maven {
+           url "https://plugins.gradle.org/m2/"
+        }
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+    //    classpath "nl.eveoh:gradle-aspectj:1.4"
+    classpath "gradle.plugin.com.google.protobuf:protobuf-gradle-plugin:0.8.2"
+    }
+}
+
+plugins {
+  id "com.google.protobuf" version "0.8.2"
+  id "java"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'com.google.protobuf'
+
 
 sourceCompatibility = 1.7
-version = '1.0'
+version = '0.0.1'
 jar {
     manifest {
         attributes 'Implementation-Title': 'Notified', 'Implementation-Version': 1.00,
-        'Main-Class': 'com.github.KCulture.Notified.application.Notified'
+        //'Main-Class': 'com.github.KCulture.Notified.application.Notified'
+        'Main-Class':'com.github.KCulture.Notified.grpc.ResponderServiceServer'
     }
 }
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
-buildscript {
-    repositories {
-        maven {
-            url "https://maven.eveoh.nl/content/repositories/releases"
-        }
+
+
+def grpcVersion = '1.5.0' // CURRENT_GRPC_VERSION
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:3.3.0"
+  }
+  plugins {
+    grpc {
+      artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
     }
-
-    dependencies {
-        classpath "nl.eveoh:gradle-aspectj:1.4"
+  }
+  generateProtoTasks {
+    all()*.plugins {
+      grpc {option 'enable_deprecated=false'}
     }
+  }
 }
 
-project.ext {
-    aspectjVersion = '1.7.4'
+
+//project.ext {
+//    aspectjVersion = '1.7.4'
+//}
+//apply plugin: 'aspectj'
+
+sourceSets {
+  main {
+    proto {
+      // In addition to the default 'src/main/proto'
+      srcDir 'src/main/protobuf'
+      srcDir 'src/main/protocolbuffers'
+      // In addition to the default '**/*.proto' (use with caution).
+      // Using an extension other than 'proto' is NOT recommended,
+      // because when proto files are published along with class files, we can
+      // only tell the type of a file from its extension.
+      include '**/*.protodevel'
+    }
+    java {
+      srcDir 'src/main/java'
+    }
+  }
+  test {
+    proto {
+      // In addition to the default 'src/test/proto'
+      srcDir 'src/test/protocolbuffers'
+      srcDir 'src/main/protocolbuffers'
+    }
+  }
 }
-apply plugin: 'aspectj'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile group: 'javax.mail', name:'mail'  , version:'1.5.0-b01'
     compile 'org.mongodb:mongo-java-driver:2.13.3' 
+    compile "com.google.api.grpc:proto-google-common-protos:0.1.9"
+    compile 'commons-cli:commons-cli:1.4'
+    compile "io.grpc:grpc-netty:${grpcVersion}"
+    compile "io.grpc:grpc-protobuf:${grpcVersion}"
+    compile "io.grpc:grpc-stub:${grpcVersion}"
+    compile "io.netty:netty-tcnative-boringssl-static:2.0.5.Final"
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.7.4'
     testCompile group: 'junit', name: 'junit', version: '4.+'
+     testCompile "io.grpc:grpc-testing:${grpcVersion}"
 }
 
 test {
@@ -53,7 +121,8 @@ uploadArchives {
 
 task fatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'com.github.KCulture.Notified.application.Notified'
+   //     attributes 'Main-Class': 'com.github.KCulture.Notified.application.Notified'
+   attributes 'Main-Class':'com.github.KCulture.Notified.grpc.ResponderServiceServer'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -63,7 +132,8 @@ task fatJar(type: Jar) {
 task runFinalJar(type: JavaExec) {
    classpath = files('build/libs/Notified-all-1.0.jar')
    classpath += sourceSets.main.runtimeClasspath
-   main = 'com.github.KCulture.Notified.application.Notified'
+   //main = 'com.github.KCulture.Notified.application.Notified'
+   main = 'com.github.KCulture.Notified.grpc.ResponderServiceServer'
 }
 
 build.dependsOn.add("runFinalJar")

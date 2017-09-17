@@ -1,0 +1,14 @@
+#setting propfile
+#Thu Oct 27 14:35:38 EDT 2016
+mongo.port=27017
+mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory
+mail.smtp.ssl.enable=false
+mail.smtp.host=localhost
+mongo.server=localhost
+mongo.database=test
+mongo.appraised.collection=appraised
+mail.smtp.starttls.enable=false
+mongo.collection=employee
+mail.smtp.port=25
+mail.smtp.auth=false
+FROM=soso@localhost

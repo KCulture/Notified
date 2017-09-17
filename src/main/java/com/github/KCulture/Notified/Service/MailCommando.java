@@ -3,24 +3,21 @@ package com.github.KCulture.Notified.Service;
 import java.util.List;
 import java.util.Properties;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-
-import com.github.KCulture.Notified.Repository.Employee;
+import com.github.KCulture.Notified.Repository.EmailContactable;
 
 public class MailCommando implements Commando {
-	List<Employee> employees;
+	List<EmailContactable> contacts;
 	EmailMessageService emailService = new EmailMessageService();
 	final Properties propFile;
-	
-	
-	public MailCommando(List<Employee> employees, Properties propFile){
-		this.employees = employees;
-		this.propFile = propFile;	
+
+	public MailCommando(List<EmailContactable> contacts, Properties propFile) {
+		this.contacts = contacts;
+		this.propFile = propFile;
 	}
+
 	@Override
-  public void execute() {
-		emailService.sendMessage(this.propFile,employees);
+	public void execute() {
+		emailService.sendMessage(this.propFile, contacts);
 	}
-	
+
 }
